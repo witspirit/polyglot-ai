@@ -9,7 +9,7 @@ version = "0.0.1-SNAPSHOT"
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(23)
     }
 }
 
@@ -28,6 +28,10 @@ extra["springAiVersion"] = "1.0.0-M3"
 
 dependencies {
     implementation("org.springframework.ai:spring-ai-ollama-spring-boot-starter")
+
+    implementation("org.graalvm.polyglot:polyglot")
+    implementation("org.graalvm.polyglot:js")
+
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
@@ -39,6 +43,13 @@ dependencies {
 dependencyManagement {
     imports {
         mavenBom("org.springframework.ai:spring-ai-bom:${property("springAiVersion")}")
+    }
+
+    dependencies {
+        dependencySet("org.graalvm.polyglot:24.1.1") {
+            entry("polyglot")
+            entry("js")
+        }
     }
 }
 

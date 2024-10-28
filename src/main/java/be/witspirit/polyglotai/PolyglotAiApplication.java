@@ -1,5 +1,6 @@
 package be.witspirit.polyglotai;
 
+import org.graalvm.polyglot.Context;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.InMemoryChatMemory;
@@ -20,6 +21,12 @@ public class PolyglotAiApplication {
     @Bean
     public CommandLineRunner runner(ChatClient.Builder builder) {
         return args -> {
+
+            try (Context context = Context.create()) {
+                context.eval("js", "console.log('Hello from GraalJS!')");
+            }
+
+
             ChatClient chatClient = builder
                     .defaultSystem("""
                     You are an experienced British butler, called Jarvis. You are used to catering to your
