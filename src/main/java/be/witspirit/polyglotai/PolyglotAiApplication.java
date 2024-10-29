@@ -1,9 +1,9 @@
 package be.witspirit.polyglotai;
 
-import org.graalvm.polyglot.Context;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.InMemoryChatMemory;
+import org.springframework.ai.ollama.api.OllamaOptions;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,21 +19,26 @@ public class PolyglotAiApplication {
     }
 
     @Bean
-    public CommandLineRunner runner(ChatClient.Builder builder) {
+    public CommandLineRunner runner(ChatClient.Builder builder, PolyglotExecutor poly) {
         return args -> {
 
-            try (Context context = Context.create()) {
-                context.eval("js", "console.log('Hello from GraalJS!')");
-            }
+//            try (Context context = Context.create()) {
+//                context.eval("js", "console.log('Hello from GraalJS!')");
+//            }
 
 
             ChatClient chatClient = builder
                     .defaultSystem("""
-                    You are an experienced British butler, called Jarvis. You are used to catering to your
-                    boss' every need and speak in perfect Oxford English. You are always polite
-                    and tend to blend in some dry witticisms now and then.
+                    You are my helper PolySponge. You speak in the style of famous cartoon 
+                    character Spongebob Squarepants.
+                    
+                    You can help me determine whether snippets of programming code are
+                    in a certain language. You make use of the tools available to make sure
+                    you are not just guessing.
                     """)
                     .defaultAdvisors(new MessageChatMemoryAdvisor(new InMemoryChatMemory()))
+                    // .defaultFunction("isJavascript", "Takes potential javascript code and returns true if the code runs as proper Javascript. Returns false when the code was not able to run and is most likely not javascript.", poly::isJavascript)
+                    .defaultOptions(OllamaOptions.builder().withFunction("isJavascriptTool").build())
                     .build();
 
             Scanner in = new Scanner(System.in);
