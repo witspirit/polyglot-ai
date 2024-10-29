@@ -2,6 +2,7 @@ package be.witspirit.polyglotai;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.InMemoryChatMemory;
 import org.springframework.ai.ollama.api.OllamaOptions;
 import org.springframework.boot.CommandLineRunner;
@@ -37,6 +38,7 @@ public class PolyglotAiApplication {
                     you are not just guessing.
                     """)
                     .defaultAdvisors(new MessageChatMemoryAdvisor(new InMemoryChatMemory()))
+                    // .defaultAdvisors(new PromptChatMemoryAdvisor(new InMemoryChatMemory()))
                     // .defaultFunction("isJavascript", "Takes potential javascript code and returns true if the code runs as proper Javascript. Returns false when the code was not able to run and is most likely not javascript.", poly::isJavascript)
                     .defaultOptions(OllamaOptions.builder().withFunction("isJavascriptTool").build())
                     .build();

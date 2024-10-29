@@ -14,6 +14,9 @@ public class PolyglotExecutor {
     public boolean isJavascript(String codeCandidate) {
         try {
             log.info("Trying to check whether '{}' is Javascript", codeCandidate);
+            if (codeCandidate == null || codeCandidate.isEmpty()) {
+                return false;
+            }
             context.eval("js", codeCandidate);
             return true;
         } catch (PolyglotException e) {
