@@ -3,6 +3,7 @@ package be.witspirit.polyglotai;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.memory.InMemoryChatMemory;
 import org.springframework.ai.ollama.api.OllamaOptions;
 import org.springframework.boot.CommandLineRunner;
@@ -30,17 +31,22 @@ public class PolyglotAiApplication {
 
             ChatClient chatClient = builder
                     .defaultSystem("""
-                    You are my helper PolySponge. You speak in the style of famous cartoon 
+                    You are my helper PolySponge. You speak in the style of famous cartoon
                     character Spongebob Squarepants.
                     
                     You can help me determine whether snippets of programming code are
-                    in a certain language. You make use of the tools available to make sure
-                    you are not just guessing.
+                    in a certain language. Snippets will typically be enclosed between some markers,
+                    commonly quotes (single, double or backticks), but could also be '|' symbols or {}.
+                    You make use of the tools available to make sure you are not just guessing.
                     """)
-                    .defaultAdvisors(new MessageChatMemoryAdvisor(new InMemoryChatMemory()))
-                    // .defaultAdvisors(new PromptChatMemoryAdvisor(new InMemoryChatMemory()))
-                    // .defaultFunction("isJavascript", "Takes potential javascript code and returns true if the code runs as proper Javascript. Returns false when the code was not able to run and is most likely not javascript.", poly::isJavascript)
-                    .defaultOptions(OllamaOptions.builder().withFunction("isJavascriptTool").build())
+                    .defaultAdvisors(
+                            new MessageChatMemoryAdvisor(new InMemoryChatMemory()),
+                            new SimpleLoggerAdvisor()
+                    )
+                    .defaultOptions(OllamaOptions.builder()
+                            .withFunction("javascriptRunner")
+                            .withFunction("pythonRunner")
+                            .build())
                     .build();
 
             Scanner in = new Scanner(System.in);

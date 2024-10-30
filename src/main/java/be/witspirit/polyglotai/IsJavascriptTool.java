@@ -8,11 +8,11 @@ import java.util.function.Function;
 public class IsJavascriptTool implements Function<IsJavascriptTool.CodeRequest, IsJavascriptTool.CodeResponse> {
     private final PolyglotExecutor polyglotExecutor;
 
-    public record CodeRequest(String candidate) {}
+    public record CodeRequest(String javascriptCandidate) {}
     public record CodeResponse(boolean isJavascript) {}
 
     @Override
     public CodeResponse apply(CodeRequest request) {
-        return new CodeResponse(polyglotExecutor.isJavascript(request.candidate()));
+        return new CodeResponse(polyglotExecutor.isJavascript(request.javascriptCandidate()));
     }
 }

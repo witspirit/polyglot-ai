@@ -25,4 +25,18 @@ public class PolyglotExecutor {
         }
     }
 
+    public boolean isPython(String codeCandidate) {
+        try {
+            log.info("Trying to check whether '{}' is Python", codeCandidate);
+            if (codeCandidate == null || codeCandidate.isEmpty()) {
+                return false;
+            }
+            context.eval("python", codeCandidate);
+            return true;
+        } catch (PolyglotException e) {
+            log.info("Failed to execute Python: {}", e.getMessage());
+            return false;
+        }
+    }
+
 }

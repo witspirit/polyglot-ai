@@ -31,6 +31,7 @@ dependencies {
 
     implementation("org.graalvm.polyglot:polyglot")
     implementation("org.graalvm.polyglot:js")
+    implementation("org.graalvm.polyglot:python")
 
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
@@ -49,6 +50,7 @@ dependencyManagement {
         dependencySet("org.graalvm.polyglot:24.1.1") {
             entry("polyglot")
             entry("js")
+            entry("python")
         }
     }
 }

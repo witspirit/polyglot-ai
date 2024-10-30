@@ -10,9 +10,15 @@ import java.util.function.Function;
 public class ToolConfig {
 
     @Bean
-    @Description("Takes potential javascript code and returns true if the code runs as proper Javascript. Returns false when the code was not able to run and is most likely not javascript.")
-    public Function<IsJavascriptTool.CodeRequest, IsJavascriptTool.CodeResponse> isJavascriptTool(PolyglotExecutor polyglotExecutor) {
+    @Description("Attempts to run provided code as Javascript and returns true if it works. Returns false when the code was not able to run and is most likely not javascript.")
+    public Function<IsJavascriptTool.CodeRequest, IsJavascriptTool.CodeResponse> javascriptRunner(PolyglotExecutor polyglotExecutor) {
         return new IsJavascriptTool(polyglotExecutor);
+    }
+
+    @Bean
+    @Description("Attempts to run provided code as Python and returns true if it works. Returns false when the code was not able to run and is most likely not python.")
+    public Function<IsPythonTool.CodeRequest, IsPythonTool.CodeResponse> pythonRunner(PolyglotExecutor polyglotExecutor) {
+        return new IsPythonTool(polyglotExecutor);
     }
 
 }
