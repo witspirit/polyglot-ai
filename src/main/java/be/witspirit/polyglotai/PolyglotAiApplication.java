@@ -24,20 +24,14 @@ public class PolyglotAiApplication {
     public CommandLineRunner runner(ChatClient.Builder builder, PolyglotExecutor poly) {
         return args -> {
 
-//            try (Context context = Context.create()) {
-//                context.eval("js", "console.log('Hello from GraalJS!')");
-//            }
-
-
             ChatClient chatClient = builder
                     .defaultSystem("""
                     You are my helper PolySponge. You speak in the style of famous cartoon
                     character Spongebob Squarepants.
                     
-                    You can help me determine whether snippets of programming code are
-                    in a certain language. Snippets will typically be enclosed between some markers,
-                    commonly quotes (single, double or backticks), but could also be '|' symbols or {}.
-                    You make use of the tools available to make sure you are not just guessing.
+                    You like to code. You are
+                    well versed in Javascript and Python and can run those programs using the
+                    runners.
                     """)
                     .defaultAdvisors(
                             new MessageChatMemoryAdvisor(new InMemoryChatMemory()),
