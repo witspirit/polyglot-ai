@@ -8,14 +8,13 @@ import org.graalvm.polyglot.SandboxPolicy;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 
 @Service
 @Slf4j
 public class PolyglotExecutor {
 
-    private final OutputStream programOutput;
-    private final OutputStream programError;
+    private final ByteArrayOutputStream programOutput;
+    private final ByteArrayOutputStream programError;
 
     private final Context jsContext;
     private final Context pyContext;
@@ -47,6 +46,7 @@ public class PolyglotExecutor {
                 return false;
             }
             jsContext.eval("js", codeCandidate);
+            logOutputs();
             return true;
         } catch (PolyglotException e) {
             log.info("Failed to execute JS: {}", e.getMessage());
@@ -61,11 +61,26 @@ public class PolyglotExecutor {
                 return false;
             }
             pyContext.eval("python", codeCandidate);
+            logOutputs();
             return true;
         } catch (PolyglotException e) {
             log.info("Failed to execute Python: {}", e.getMessage());
             return false;
         }
+    }
+
+    private void logOutputs() {
+        String output = programOutput.toString();
+        if (output != null && !output.isEmpty()) {
+            log.info("PROGRAM OUTPUT: {}", output);
+        }
+        programOutput.reset();
+
+        String errors = programOutput.toString();
+        if (errors != null && !errors.isEmpty()) {
+            log.info("PROGRAM ERRORS: {}", errors);
+        }
+        programError.reset();
     }
 
 }
